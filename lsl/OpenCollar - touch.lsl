@@ -98,7 +98,7 @@ default
     state_entry()
     {
         integer iAttachPt = llGetAttached();
-        if ((iAttachPt > 0 && iAttachPt < 31) || iAttachPt == 39) // if collar is attached to the body (thus excluding HUD and root/avatar center)
+//        if ((iAttachPt > 0 && iAttachPt < 31) || iAttachPt == 39) // if collar is attached to the body (thus excluding HUD and root/avatar center)
             llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
     }
     

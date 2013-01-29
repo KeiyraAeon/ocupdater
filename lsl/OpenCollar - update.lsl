@@ -1,4 +1,4 @@
-//OpenCollar - update
+///OpenCollar - update
 //Licensed under the GPLv2, with the additional requirement that these scripts
 //remain "full perms" in Second Life.  See "OpenCollar License" for details.
 
@@ -62,20 +62,20 @@ key g_kUpdaterOrb;
 
 // We check for the latest version number by looking at the "~version" notecard
 // inside the 'release' branch of the collar's Github repo.
-string version_check_url = "https://raw.github.com/OpenCollarUpdates/ocupdater/release/lsl/~version";
+string version_check_url = "https://raw.github.com/OpenCollarUpdates/ocupdater/OpenSim/lsl/~version";
 key github_version_request;
 
 // A request to this URL will trigger delivery of an updater.  We omit the
 // "version=blah" parameter because we don't want the server deciding whether
 // we should get an updater or not.  We just want one.
-string delivery_url = "http://update.mycollar.org/updater/check?object=OpenCollarUpdater&update=yes";
+string delivery_url = ""// not working on OpenSim yet "http://update.mycollar.org/updater/check?object=OpenCollarUpdater&update=yes";
 key appengine_delivery_request;
 
 // The news system is back!  Only smarter this time.  News will be kept in a
 // static file on Github to keep server load down.  This script will remember
 // the date of the last time it reported news so it will only show things once.
 // It will also not show things more than a week old.
-string news_url = "https://raw.github.com/OpenCollarUpdates/ocupdater/master/news.md";
+string news_url = "https://raw.github.com/OpenCollarUpdates/ocupdater/OpenSim/news.md";
 key news_request;
 
 // store versions as strings and don't cast to float until the last minute.
@@ -234,7 +234,8 @@ integer UserCommand(integer iNum, string str, key id) // here iNum: auth value, 
         else if (submenu == BTN_GET_UPDATE)
         {
             if (id == wearer)
-                appengine_delivery_request = llHTTPRequest(delivery_url, [HTTP_METHOD, "GET"], "");
+                Notify(id, "Requesting updates is not implemented on this grid yet.";
+//                appengine_delivery_request = llHTTPRequest(delivery_url, [HTTP_METHOD, "GET"], "");
             else Notify(id,"Only the wearer can request updates for the collar.",FALSE);
         }
         else if (submenu == BTN_GET_VERSION) UserCommand(iNum, "version", id);
@@ -365,7 +366,8 @@ default
 
                 if (sMessage == BTN_GET_UPDATE)
                 {
-                    appengine_delivery_request = llHTTPRequest(delivery_url, [HTTP_METHOD, "GET"], "");
+                    Notify(id, "Requesting updates is not implemented on this grid yet.";
+//                    appengine_delivery_request = llHTTPRequest(delivery_url, [HTTP_METHOD, "GET"], "");
                 }
             }
             else if (id == g_kConfirmUpdate)

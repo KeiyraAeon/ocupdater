@@ -173,8 +173,8 @@ SaveSettings()
 UpdateSettings(string sSettings)
 {
     list lArgs = llParseString2List(sSettings,[","],[]);
-    integer i;
-    for (i=0;i<(lArgs!=[]);++i)
+    integer i = llGetListLength(lArgs) - 1;
+    for (;i >= 0; --i)
     {
         list setting=llParseString2List(llList2String(lArgs,i),[":"],[]);
         string var=llList2String(setting,0);
@@ -280,7 +280,8 @@ string HandleCommand(string sIdent, key kID, string sCom, integer iAuthed)
     integer iGotWho = FALSE; // has the user been specified up to now?
     key kWho;
     integer i;
-    for (i=0;i<(lCommands!=[]);++i)
+    integer l = llGetListLength(lCommands);
+    for (i = 0; i < l ;++i)
     {
         sCom = llList2String(lCommands,i);
         list lSubArgs = llParseString2List(sCom,["="],[]);
@@ -312,7 +313,7 @@ string HandleCommand(string sIdent, key kID, string sCom, integer iAuthed)
             if (iGotWho) return "!x-who/"+(string)kWho+"|"+llDumpList2String(llList2List(lCommands,i,-1),"|");
             else return llDumpList2String(llList2List(lCommands,i,-1),"|");
         }
-        else if ((lSubArgs!=[])==2)
+        else if (llGetListLength(lSubArgs)==2)
         {
             string sBehav=llGetSubString(llList2String(lSubArgs,0),1,-1);
             if (sVal=="force"||sVal=="n"||sVal=="add"||sVal=="y"||sVal=="rem"||sBehav=="clear")
@@ -351,8 +352,8 @@ SafeWord()
         g_lTempWhiteList=[];
         g_lTempUserBlackList=[];
         g_lTempUserWhiteList=[];
-        integer i;
-        for (i=0;i<(g_lSources!=[]);++i)
+        integer i = llGetListLength(g_lSources) - 1;
+        for (; i >= 0; --i)
         {
             sendrlvr("release", llList2Key(g_lSources, i), "!release", "ok");
         }
@@ -379,7 +380,7 @@ Menu(key kID, integer iAuth)
     else lButtons+=["( )Land"];
     if (g_lSources!=[])
     {
-        sPrompt+="\nCurrently grabbed by "+(string)(g_lSources!=[])+" object";
+        sPrompt+="\nCurrently grabbed by "+(string)llGetListLength(g_lSources)+" object";
         if (g_lSources==[1]) sPrompt+="."; // Note: only list LENGTH is compared here
         else sPrompt+="s.";
         lButtons+=["Grabbed by"];
@@ -468,8 +469,8 @@ PListsMenu(key kID, string sMsg, integer iAuth)
     g_sListType=sMsg;
 
     list lButtons=[ALL];
-    integer i;
-    for (i=0;i<(lOList!=[]);++i)
+    integer i = llGetListLength(lOList) - 1;
+    for (i; i >= 0; --i)
     {
         lButtons+=(string)(i+1);
         llInstantMessage(kID, (string)(i+1)+": "+llList2String(lOListNames,i)+", "+llList2String(lOList,i));
@@ -501,7 +502,7 @@ RemListItem(string sMsg, integer iAuth)
     if (g_sListType=="Banned Avatar")
     {
         if (sMsg==ALL) {g_lAvBlackList=[];g_lAvBlackListNames=[];return;}
-        if  (i<(g_lAvBlackList!=[]))
+        if  (i < llGetListLength(g_lAvBlackList))
         { 
             g_lAvBlackList=llDeleteSubList(g_lAvBlackList,i,i);
             g_lAvBlackListNames=llDeleteSubList(g_lAvBlackListNames,i,i);
@@ -510,7 +511,7 @@ RemListItem(string sMsg, integer iAuth)
     else if (g_sListType=="Banned Object")
     {
         if (sMsg==ALL) {g_lObjBlackList=[];g_lObjBlackListNames=[];return;}
-        if  (i<(g_lObjBlackList!=[]))
+        if  (i < llGetListLength(g_lObjBlackList))
         {
             g_lObjBlackList=llDeleteSubList(g_lObjBlackList,i,i);
             g_lObjBlackListNames=llDeleteSubList(g_lObjBlackListNames,i,i);
@@ -523,7 +524,7 @@ RemListItem(string sMsg, integer iAuth)
     else if (g_sListType=="Trusted Object")
     {
         if (sMsg==ALL) {g_lObjWhiteList=[];g_lObjWhiteListNames=[];return;}
-        if  (i<(g_lObjWhiteList!=[]))
+        if  (i < llGetListLength(g_lObjWhiteList))
         {
             g_lObjWhiteList=llDeleteSubList(g_lObjWhiteList,i,i);
             g_lObjWhiteListNames=llDeleteSubList(g_lObjWhiteListNames,i,i);
@@ -532,7 +533,7 @@ RemListItem(string sMsg, integer iAuth)
     else if (g_sListType=="Trusted Avatar")
     {
         if (sMsg==ALL) {g_lAvWhiteList=[];g_lAvWhiteListNames=[];return;}
-        if  (i<(g_lAvWhiteList!=[])) 
+        if  (i < llGetListLength(g_lAvWhiteList)) 
         { 
             g_lAvWhiteList=llDeleteSubList(g_lAvWhiteList,i,i);
             g_lAvWhiteListNames=llDeleteSubList(g_lAvWhiteListNames,i,i);
@@ -553,7 +554,7 @@ CleanQueue()
     //clean newly iNumed events, while preserving the order of arrival for every device
     list lOnHold=[];
     integer i=0;
-    while (i<(g_lQueue!=[])/QSTRIDES)  //GetQLength()
+    while (i < llGetListLength(g_lQueue)/QSTRIDES)  //GetQLength()
     {
         string sIdent = llList2String(g_lQueue,0); //GetQident(0)
         key kObj = llList2String(g_lQueue,1); //GetQObj(0);
@@ -572,8 +573,8 @@ CleanQueue()
         {
             g_lQueue = llDeleteSubList(g_lQueue,i,i+QSTRIDES-1); //DeleteQItem(i);
             list lCommands = llParseString2List(sCommand,["|"],[]);
-            integer j;
-            for (j=0;j<(lCommands!=[]);++j)
+            integer j; integer l = llGetListLength(lCommands);
+            for (j=0; j<l; ++j)
                 sendrlvr(sIdent,kObj,llList2String(lCommands,j),"ko");
         }
         else
@@ -601,13 +602,13 @@ integer UserCommand(integer iNum, string sStr, key kID)
     else if (iNum!=COMMAND_OWNER&&kID!=g_kWearer)
         llInstantMessage(kID, "Sorry, only the wearer of the collar or their owner can change the relay options.");
     else if (sStr=="safeword") SafeWord();
-    else if (sStr=="relay getdebug")
+    else if (sStr=="getdebug")
     {
         g_kDebugRcpt = kID;
         notify(kID, "Relay messages will be forwarded to "+llKey2Name(kID)+".", TRUE);
         return TRUE;
     }
-    else if (sStr=="relay stopdebug")
+    else if (sStr=="stopdebug")
     {
         g_kDebugRcpt = NULL_KEY;
         notify(kID, "Relay messages will not forwarded anymore.", TRUE);
@@ -847,7 +848,7 @@ default
                     else if (sMsg=="MinMode") MinModeMenu(kAv, iAuth);
                     else if (sMsg=="Help")
                     {
-                        llGiveInventory(kAv,"OpenCollar RLV Relay Help");
+                        llGiveInventory(kAv,"OpenCollar - rlvrelay - Help");
                         Menu(kAv, iAuth);
                     }
                     else if (sMsg==UPMENU)
@@ -978,7 +979,7 @@ default
 //        { //in other cases we analyze the command here
         list lArgs=llParseString2List(sMsg,[","],[]);
         sMsg = "";  // free up memory in case of large messages
-        if ((lArgs!=[])!=3) return;
+        if ((llGetListLength(lArgs))!=3) return;
         if (llList2Key(lArgs,1)!=g_kWearer && llList2String(lArgs,1)!="ffffffff-ffff-ffff-ffff-ffffffffffff") return; // allow FFF...F wildcard
         string sIdent=llList2String(lArgs,0);
         sMsg=llToLower(llList2String(lArgs,2));
@@ -1034,8 +1035,8 @@ default
         }
         //garbage collection
         vector vMyPos = llGetRootPosition();
-        integer i;
-        for (i=0;i<(g_lSources!=[]);++i)
+        integer i = llGetListLength(g_lSources) - 1;
+        for (;i >= 0; --i)
         {
             key kID = llList2Key(g_lSources,i);
             vector vObjPos = llList2Vector(llGetObjectDetails(kID, [OBJECT_POS]),0);

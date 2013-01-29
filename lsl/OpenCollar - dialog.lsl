@@ -1,4 +1,4 @@
-//OpenCollar - dialog
+///OpenCollar - dialog
 //an adaptation of Schmobag Hogfather's SchmoDialog script
 
 //MESSAGE MAP
@@ -47,7 +47,7 @@ string PREV = "<";
 string UPMENU = "^"; // string to identify the UPMENU button in the utility lButtons
 //string SWAPBTN = "swap";
 //string SYNCBTN = "sync";
-string BLANK = " ";
+string BLANK = ".";
 integer g_iTimeOut = 300;
 integer g_iReapeat = 5;//how often the timer will go off, in seconds
 

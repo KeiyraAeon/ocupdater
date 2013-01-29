@@ -1,4 +1,4 @@
-//OpenCollar - rlvmain
+///OpenCollar - rlvmain
 //Licensed under the GPLv2, with the additional requirement that these scripts remain "full perms" in Second Life.  See "OpenCollar License" for details.
 //new viewer checking method, as of 2.73
 //on rez, restart script

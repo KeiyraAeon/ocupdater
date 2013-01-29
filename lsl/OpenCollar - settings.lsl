@@ -1,4 +1,4 @@
-//OpenCollar - settings
+///OpenCollar - settings
 // This script stores settings for other scripts in the collar.  In bygone days
 // it was responsible for storing them to an online database too.  It doesn't
 // do that anymore.  But so long as plugin scripts are still using central

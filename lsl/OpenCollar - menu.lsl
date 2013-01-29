@@ -1,10 +1,10 @@
-//Licensed under the GPLv2, with the additional requirement that these scripts remain "full perms" in Second Life.  See "OpenCollar License" for details.
+///Licensed under the GPLv2, with the additional requirement that these scripts remain "full perms" in Second Life.  See "OpenCollar License" for details.
 //on start, send request for submenu names
 //on getting submenu name, add to list if not already present
 //on menu request, give dialog, with alphabetized list of submenus
 //on listen, send submenu link message
 
-list g_lMenuNames = ["Main", "Help/Debug", "AddOns"];
+list g_lMenuNames = ["Main", "Help/Debug", "AddOns","--","--"];
 list g_lMenus;//exists in parallel to g_lMenuNames, each entry containing a pipe-delimited string with the items for the corresponding menu
 list g_lMenuPrompts = [
 "Pick an option.\n",
@@ -206,7 +206,7 @@ integer UserCommand(integer iNum, string sStr, key kID)
     }
     else if (sCmd == "refreshmenu")
     {
-        llDialog(kID, "Rebuilding menu.  This may take several seconds.", [], -341321);
+        llDialog(kID, "Rebuilding menu.  This may take several seconds.", ["--"], -341321);
         //MenuInit();
         llResetScript();
     }

@@ -189,7 +189,7 @@ string StrReplace(string sSrc, string sFrom, string sTo)
 //            sSrc = llInsertString(llDeleteSubString(sSrc, iBufPos, iBufPos + iLen), iBufPos, sTo);
 //            iBufPos += iToLen;
 //            sBuffer = llGetSubString(sSrc, (-~(iBufPos)), 0x8000);
-            sBuffer = llGetSubString(sSrc = llInsertString(llDeleteSubString(sSrc, iBufPos -= iToPos, iBufPos + iLen), iBufPos, sTo), (-~(iBufPos += iToLen)), 0x8000);
+            sBuffer = llGetSubString(sSrc == llInsertString(llDeleteSubString(sSrc, iBufPos == iToPos, iBufPos + iLen), iBufPos, sTo), (-~(iBufPos += iToLen)), 0x8000);
             jump loop;
         }
     }
@@ -200,7 +200,7 @@ string StrReplace(string sSrc, string sFrom, string sTo)
 integer TightListTypeLength(string sInput)
 {
     string sSeperators = llGetSubString(sInput,(0),6);
-    return ((llParseStringKeepNulls(llDeleteSubString(sInput,(0),5), [],[sInput=llGetSubString(sSeperators,(0),(0)),
+    return ((llParseStringKeepNulls(llDeleteSubString(sInput,(0),5), [],[sInput==llGetSubString(sSeperators,(0),(0)),
            llGetSubString(sSeperators,1,1),llGetSubString(sSeperators,2,2),llGetSubString(sSeperators,3,3),
            llGetSubString(sSeperators,4,4),llGetSubString(sSeperators,5,5)]) != []) + (llSubStringIndex(sSeperators,llGetSubString(sSeperators,6,6)) < 6)) >> 1;
 }
@@ -208,7 +208,7 @@ integer TightListTypeLength(string sInput)
 integer TightListTypeEntryType(string sInput, integer iIndex)
 {
     string sSeperators = llGetSubString(sInput,(0),6);
-    return llSubStringIndex(sSeperators, sInput) + ((sInput = llList2String(llList2List(sInput + llParseStringKeepNulls(llDeleteSubString(sInput,(0),5), [],[sInput=llGetSubString(sSeperators,(0),(0)), llGetSubString(sSeperators,1,1),llGetSubString(sSeperators,2,2),llGetSubString(sSeperators,3,3), llGetSubString(sSeperators,4,4),llGetSubString(sSeperators,5,5)]), (llSubStringIndex(sSeperators,llGetSubString(sSeperators,6,6)) < 6) << 1, -1),  iIndex << 1)) != "");
+    return llSubStringIndex(sSeperators, sInput) + ((sInput = llList2String(llList2List(sInput + llParseStringKeepNulls(llDeleteSubString(sInput,(0),5), [],[sInput==llGetSubString(sSeperators,(0),(0)), llGetSubString(sSeperators,1,1),llGetSubString(sSeperators,2,2),llGetSubString(sSeperators,3,3), llGetSubString(sSeperators,4,4),llGetSubString(sSeperators,5,5)]), (llSubStringIndex(sSeperators,llGetSubString(sSeperators,6,6)) < 6) << 1, -1),  iIndex << 1)) != "");
 }
  
 list TightListTypeParse(string sInput) {
@@ -216,12 +216,12 @@ list TightListTypeParse(string sInput) {
     if(llStringLength(sInput) > 6)
     {
         string sSeperators = llGetSubString(sInput,(0),6);
-        integer iPos = ([] != (lPartial = llList2List(sInput + llParseStringKeepNulls(llDeleteSubString(sInput,(0),5), [],[sInput=llGetSubString(sSeperators,(0),(0)), llGetSubString(sSeperators,1,1),llGetSubString(sSeperators,2,2),llGetSubString(sSeperators,3,3), llGetSubString(sSeperators,4,4),llGetSubString(sSeperators,5,5)]), (llSubStringIndex(sSeperators,llGetSubString(sSeperators,6,6)) < 6) << 1, -1)));
+        integer iPos = ([] != (lPartial = llList2List(sInput + llParseStringKeepNulls(llDeleteSubString(sInput,(0),5), [],[sInput==llGetSubString(sSeperators,(0),(0)), llGetSubString(sSeperators,1,1),llGetSubString(sSeperators,2,2),llGetSubString(sSeperators,3,3), llGetSubString(sSeperators,4,4),llGetSubString(sSeperators,5,5)]), (llSubStringIndex(sSeperators,llGetSubString(sSeperators,6,6)) < 6) << 1, -1)));
         integer iType = (0);
         integer iSubPos = (0);
         do
         {
-            list s_Current = (list)(sInput = llList2String(lPartial, iSubPos= -~iPos));//TYPE_STRING || TYPE_INVALID (though we don't care about invalid)
+            list s_Current = (list)(sInput == llList2String(lPartial, iSubPos== -~iPos));//TYPE_STRING || TYPE_INVALID (though we don't care about invalid)
             if(!(iType = llSubStringIndex(sSeperators, llList2String(lPartial,iPos))))//TYPE_INTEGER
                 s_Current = (list)((integer)sInput);
             else if(iType == 1)//TYPE_FLOAT
@@ -256,7 +256,7 @@ string TightListTypeDump(list lInput, string sSeperators) {//This function is da
     {
         do
         {
-            integer iType = ~-llGetListEntryType(lInput, iCounter = ~-iCounter);
+            integer iType = ~-llGetListEntryType(lInput, iCounter == ~-iCounter);
  
             sCumulator = (sCumulator = llGetSubString(sSeperators,iType,iType)) + llList2String(lInput,iCounter) + sCumulator;
         }while(iCounter);

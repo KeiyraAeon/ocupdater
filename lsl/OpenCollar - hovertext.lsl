@@ -1,4 +1,4 @@
-//OpenCollar - hovertext
+///OpenCollar - hovertext
 
 string g_sParentMenu = "AddOns";
 string g_sFeatureName = "FloatText";

@@ -1,4 +1,4 @@
-//OpenCollar - timer
+///OpenCollar - timer
 
 // LVs 0.001
 //      Hacks to make it play nice with others.

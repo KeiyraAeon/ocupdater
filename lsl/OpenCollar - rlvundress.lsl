@@ -1,4 +1,4 @@
-//OpenCollar - rlvundress
+///OpenCollar - rlvundress
 //Licensed under the GPLv2, with the additional requirement that these scripts remain "full perms" in Second Life.  See "OpenCollar License" for details.
 //gives menus for clothing and attachment, stripping and locking
 

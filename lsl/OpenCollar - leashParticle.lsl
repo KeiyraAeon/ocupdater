@@ -1,4 +1,4 @@
-//OpenCollar - leashParticle
+///OpenCollar - leashParticle
 //leash particle script for the Open Collar Project (c)
 //Licensed under the GPLv2, with the additional requirement that these scripts remain "full perms" in Second Life.  See "OpenCollar License" for details.
 //Split from the leash script in April 2010 by Garvin Twine

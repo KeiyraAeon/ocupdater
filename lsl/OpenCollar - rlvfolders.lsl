@@ -1,4 +1,4 @@
-//OpenCollar - rlvfolders
+///OpenCollar - rlvfolders
 //Licensed under the GPLv2, with the additional requirement that these scripts remain "full perms" in Second Life.  See "OpenCollar License" for details.
 
 string g_sParentMenu = "Un/Dress";
@@ -422,7 +422,7 @@ handleMultiSearch()
 
     if (pref2 == "++" || pref2 == "--" || pref2 == "&&") 
     {
-	g_sFolderType += "all";
+    g_sFolderType += "all";
         sItem = llToLower(llGetSubString(sItem,2,-1));
     }
     else sItem = llToLower(llGetSubString(sItem,1,-1));
