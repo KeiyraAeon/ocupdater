@@ -88,7 +88,7 @@ HideText() {
 
 
 // for storing the link number of the prim where we'll set text.
-integer g_iTextPrim = -1;
+integer g_iTextPrim = LINK_ROOT;
 
 vector GetTextPrimColor() {
     if ( g_iTextPrim == -1 ) {
