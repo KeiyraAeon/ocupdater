@@ -204,18 +204,9 @@ NewPerson(key kID, string sName, string sType)
 
 key Dialog(key kRCPT, string sPrompt, list lChoices, list lUtilityButtons, integer iPage, integer iAuth)
 {
-    //key generation
-    //just pick 8 random hex digits and pad the rest with 0.  Good enough for dialog uniqueness.
-    string sOut;
-    integer n;
-    for (n = 0; n < 8; ++n)
-    {
-        integer iIndex = (integer)llFrand(16);//yes this is correct; an integer cast rounds towards 0.  See the llFrand wiki entry.
-        sOut += llGetSubString( "0123456789abcdef", iIndex, iIndex);
-    }
-    key kID = (sOut + "-0000-0000-0000-000000000000");
+    key kID = llGenerateKey();
     llMessageLinked(LINK_SET, DIALOG, (string)kRCPT + "|" + sPrompt + "|" + (string)iPage + "|" 
-        + llDumpList2String(lChoices, "`") + "|" + llDumpList2String(lUtilityButtons, "`") + "|" + (string)iAuth, kID);
+    + llDumpList2String(lChoices, "`") + "|" + llDumpList2String(lUtilityButtons, "`") + "|" + (string)iAuth, kID);
     return kID;
 } 
 
@@ -1133,7 +1124,8 @@ default
         }
         else if(g_sRequestType == g_sOwnerScan || g_sRequestType == g_sSecOwnerScan || g_sRequestType == g_sBlackListScan)
         {
-            Notify(g_kDialoger, "Nobody is in 10m range to be shown, either move closer or use the chat command to add someone who is not with you at this moment or offline.",FALSE);
+            string sText = "Nobody other than yourself is in range. You can either add yourself or just walk closer to the person you want to add and try again.";
+            g_kSensorMenuID = Dialog(g_kDialoger, sText, [llKey2Name(g_kWearer)], [UPMENU], 0, g_iDialogerAuth);
         }
     }
 

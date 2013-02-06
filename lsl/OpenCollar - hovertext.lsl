@@ -68,9 +68,9 @@ ShowText(string sNewText) {
     g_sText = llDumpList2String(lTmp, "\n");
     list params = [PRIM_TEXT, g_sText, g_vColor, 1.0];
 
-    if (g_iTextPrim > 1) {//don't scale the root prim
+//    if (g_iTextPrim > LINK_ROOT) {//don't scale the root prim <- SA: Why not?
         params += [PRIM_SIZE, g_vShowScale];
-    }
+//    }
     
     llSetLinkPrimitiveParamsFast(g_iTextPrim, params);
     g_iOn = TRUE;
@@ -79,21 +79,21 @@ ShowText(string sNewText) {
 HideText() {
     Debug("hide text");
     list params = [PRIM_TEXT, "", g_vColor, 1.0];
-    if (g_iTextPrim > 1) {
+//    if (g_iTextPrim > LINK_ROOT) {
         params += [PRIM_SIZE, g_vHideScale];
-    }
+//    }
     llSetLinkPrimitiveParamsFast(g_iTextPrim, params);    
     g_iOn = FALSE;
 }
 
 
 // for storing the link number of the prim where we'll set text.
-integer g_iTextPrim = -1;
+integer g_iTextPrim = LINK_THIS;
 
 vector GetTextPrimColor() {
-    if ( g_iTextPrim == -1 ) {
+    //if ( g_iTextPrim == -1 ) {
         return  ZERO_VECTOR ;
-    }
+    //}
     list params = llGetLinkPrimitiveParams( g_iTextPrim, [PRIM_COLOR, ALL_SIDES] ) ;
     return llList2Vector( params, 0 ) ;
 }

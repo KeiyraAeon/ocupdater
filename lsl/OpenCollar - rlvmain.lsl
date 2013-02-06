@@ -133,18 +133,9 @@ DoMenu(key kID, integer iAuth)
 
 key Dialog(key kRCPT, string sPrompt, list lChoices, list lUtilityButtons, integer iPage, integer iAuth)
 {
-    //key generation
-    //just pick 8 random hex digits and pad the rest with 0.  Good enough for dialog uniqueness.
-    string sOut;
-    integer n;
-    for (n = 0; n < 8; ++n)
-    {
-        integer iIndex = (integer)llFrand(16);//yes this is correct; an integer cast rounds towards 0.  See the llFrand wiki entry.
-        sOut += llGetSubString( "0123456789abcdef", iIndex, iIndex);
-    }
-    key kID = (sOut + "-0000-0000-0000-000000000000");
+    key kID = llGenerateKey();
     llMessageLinked(LINK_SET, DIALOG, (string)kRCPT + "|" + sPrompt + "|" + (string)iPage + "|" 
-        + llDumpList2String(lChoices, "`") + "|" + llDumpList2String(lUtilityButtons, "`") + "|" + (string)iAuth, kID);
+    + llDumpList2String(lChoices, "`") + "|" + llDumpList2String(lUtilityButtons, "`") + "|" + (string)iAuth, kID);
     return kID;
 } 
 
@@ -156,8 +147,6 @@ integer StartsWith(string sHayStack, string sNeedle) {
 
 // Book keeping functions
 
-integer SIT_CHANNEL;
-
 list g_lOwners;
 
 list g_lSources=[];
@@ -167,7 +156,6 @@ list g_lOldSources;
 
 list g_lBaked=[];
 
-integer g_iSitListener;
 key g_kSitter=NULL_KEY;
 key g_kSitTarget=NULL_KEY;
 
@@ -235,8 +223,7 @@ AddRestriction(key kID, string sBehav)
         ApplyAdd(sBehav);
         if (sBehav=="unsit")
         {
-            g_iSitListener=llListen(SIT_CHANNEL,"",g_kWearer,"");
-            SendCommand("getsitid="+(string)SIT_CHANNEL);
+            g_kSitTarget = llList2Key(llGetObjectDetails(g_kWearer, [OBJECT_ROOT]), 0);
             g_kSitter=kID;
         }
     }
@@ -449,7 +436,6 @@ default{
         //request setting from DB
         llSleep(1.0);
         llMessageLinked(LINK_SET, LM_SETTING_REQUEST, "rlvon", NULL_KEY);
-        SIT_CHANNEL=9999 + llFloor(llFrand(9999999.0));
         // Ensure that menu script knows we're here.
         llMessageLinked(LINK_SET, MENUNAME_RESPONSE, g_sParentMenu + "|" + g_sSubMenu, NULL_KEY);
     }
@@ -773,15 +759,6 @@ state checked {
             {
                 SafeWord(FALSE);
             }
-        }
-    }
-
-    listen(integer iChan, string sName, key kID, string sMsg)
-    {
-        if (iChan==SIT_CHANNEL)
-        {
-            g_kSitTarget=(key)sMsg;
-            llListenRemove(g_iSitListener);
         }
     }
 

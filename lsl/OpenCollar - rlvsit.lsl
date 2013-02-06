@@ -111,18 +111,9 @@ Notify(key kID, string sMsg, integer iAlsoNotifyWearer) {
 
 key Dialog(key kRCPT, string sPrompt, list lChoices, list lUtilityButtons, integer iPage, integer iAuth)
 {
-    //key generation
-    //just pick 8 random hex digits and pad the rest with 0.  Good enough for dialog uniqueness.
-    string sOut;
-    integer n;
-    for (n = 0; n < 8; ++n)
-    {
-        integer iIndex = (integer)llFrand(16);//yes this is correct; an integer cast rounds towards 0.  See the llFrand wiki entry.
-        sOut += llGetSubString( "0123456789abcdef", iIndex, iIndex);
-    }
-    key kID = (sOut + "-0000-0000-0000-000000000000");
+    key kID = llGenerateKey();
     llMessageLinked(LINK_SET, DIALOG, (string)kRCPT + "|" + sPrompt + "|" + (string)iPage + "|" 
-        + llDumpList2String(lChoices, "`") + "|" + llDumpList2String(lUtilityButtons, "`") + "|" + (string)iAuth, kID);
+    + llDumpList2String(lChoices, "`") + "|" + llDumpList2String(lUtilityButtons, "`") + "|" + (string)iAuth, kID);
     return kID;
 } 
 
@@ -135,15 +126,6 @@ integer IsUnsitEnabled()
         return 0;
 
     return 1;
-}
-
-ClearSitMemory()
-{
-    if (g_sSitTarget != "")
-    {
-        g_sSitTarget = "";
-        //llOwnerSay("Sit memory cleared.");
-    }
 }
 
 Menu(key kID, integer iAuth)
@@ -401,10 +383,6 @@ default
 
         g_kWearer = llGetOwner();
         
-        // Randomize the channel used to poll the client
-        g_iSitChan = RandomChannel();
-        
-        g_iSitListener = llListen(g_iSitChan, "", "", "");
     }
     
     on_rez(integer iParam)
@@ -417,28 +395,23 @@ default
         // Nothing to do if RLV isn't enabled
         if (!g_iRLVOn)
             return;
+
+        key kSitKey = llList2Key(llGetObjectDetails(g_kWearer, [OBJECT_ROOT]), 0);
         
         // If we are in memory mode...
         if (!g_iSitMode)
         {
-            // ... we poll only if unsit is disabled and the avatar is sitting
-            integer Sitting = llGetAgentInfo(g_kWearer) & AGENT_SITTING;
-            
-            if (IsUnsitEnabled() || (!Sitting))
-            {
-                ClearSitMemory();
-                return;
+            if (IsUnsitEnabled() || kSitKey == g_kWearer)
+            {   // either unsit is allowed or you are not sitting anywhere, nothing to remember then
+                g_sSitTarget = "";
+            }
+            else if ((string)kSitKey != g_sSitTarget)
+            {   // you are sitting somewhere you are not allowed to stand up from, then remember where it was
+                g_sSitTarget = (string)kSitKey;
             }
         }
-
-        // No need for all the plugins etc to see this command so we send it directly
-        llOwnerSay("@getsitid=" + (string)g_iSitChan);
-    }
-
-    listen(integer channel, string name, key id, string message)
-    {
         // Restore mode
-        if (g_iSitMode)
+        else
         {
             integer iIndex;
             string  sSittpValue;
@@ -452,7 +425,7 @@ default
             }
 
             // Did we successfully resit the sub ?
-            if (message == g_sSitTarget)
+            if ((string)kSitKey == g_sSitTarget)
             {
                 llOwnerSay("Sit Memory: Restored Forcesit on " + llKey2Name((key)g_sSitTarget));
                 g_iSitMode = 0;
@@ -476,21 +449,6 @@ default
             sSittpValue = llList2String(g_lSettings, iIndex + 1);
 
             llMessageLinked(LINK_THIS, RLV_CMD, "sittp=y,sit:" + g_sSitTarget + "=force,sittp=" + sSittpValue, NULL_KEY);
-        }
-        else // Memory mode
-        {
-            if (message != g_sSitTarget)
-            {
-                key kSitKey = (key)message;
-
-                if (kSitKey == NULL_KEY)
-                    ClearSitMemory();
-                else
-                {
-                    g_sSitTarget = message;
-                    //llOwnerSay("Object " + llKey2Name(kSitKey) + " stored in sit memory, sitting will be restored after relogging.");
-                }
-            }
         }
     }
     
