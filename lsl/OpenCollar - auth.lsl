@@ -1124,7 +1124,8 @@ default
         }
         else if(g_sRequestType == g_sOwnerScan || g_sRequestType == g_sSecOwnerScan || g_sRequestType == g_sBlackListScan)
         {
-            Notify(g_kDialoger, "Nobody is in 10m range to be shown, either move closer or use the chat command to add someone who is not with you at this moment or offline.",FALSE);
+            string sText = "Nobody other than yourself is in range. You can either add yourself or just walk closer to the person you want to add and try again.";
+            g_kSensorMenuID = Dialog(g_kDialoger, sText, [llKey2Name(g_kWearer)], [UPMENU], 0, g_iDialogerAuth);
         }
     }
 
