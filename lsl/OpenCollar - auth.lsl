@@ -1004,6 +1004,7 @@ default
                     else if (sMessage == g_sReset)
                     { // separate routine
                         llMessageLinked(LINK_SET, COMMAND_NOAUTH, "runaway", kAv);
+                        return; // do not pop up a menu that will not work because auth plugin resets just after. Quick fix for issue 1515, before we do deeper changes.
                     }
                     AuthMenu(kAv, iAuth);
                 }
